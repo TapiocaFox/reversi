@@ -19,6 +19,7 @@ YOU O:2   COM @:2
 #include <string.h>
 #include <iostream>
 using namespace std;
+char version [128] = "beta 1.0.3";
 int com();
 class reversi {
   private:
@@ -269,7 +270,9 @@ int com() {
     <<"    \"p1_2\": \""<<ctrl.mypoint()<<"\",\n"
     <<"    \"p2_2\": \""<<ctrl.compoint()<<"\",\n"
     <<"    \"x\": \""<<temp[1]<<"\",\n"
-    <<"    \"y\": \""<<temp[2]<<"\"\n"
+    <<"    \"y\": \""<<temp[2]<<"\",\n"
+    <<"    \"version\": \""<<version<<"\",\n"
+    <<"    \"message\": \""<<"OK"<<"\"\n"
     <<"}";
   }else {
     int p1,p2;
@@ -289,6 +292,8 @@ int com() {
     <<"    \"p2_2\": \""<<ctrl.compoint()<<"\",\n"
     <<"    \"x\": \""<<-1<<"\",\n"
     <<"    \"y\": \""<<-1<<"\"\n"
+    <<"    \"version\": \""<<version<<"\",\n"
+    <<"    \"message\": \""<<"OK"<<"\"\n"
     <<"}";
   }
   return 0;
@@ -304,7 +309,11 @@ int main() {
     strcpy(A,B.c_str());
     ctrl.setbykey(A);
     if (ctrl.set(X, Y, 1)==-1) {
-      printf("err");
+      cout
+      <<"{\n"
+      <<"    \"version\": \""<<version<<"\",\n"
+      <<"    \"message\": \""<<"err"<<"\"\n"
+      <<"}";
       return 0;
     }
     com();

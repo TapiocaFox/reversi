@@ -19,7 +19,7 @@ YOU O:2   COM @:2
 #include <string.h>
 #include <iostream>
 using namespace std;
-char version [128] = "beta 1.0.3";
+char version [128] = "beta 1.2.0";
 int com();
 class reversi {
   private:
@@ -37,6 +37,7 @@ class reversi {
     int generatekey(char *&key);
     int setbykey(char *key);
     int printkey();
+    int can_set(int);
 };
 reversi::reversi() {}
 int reversi::printkey () {
@@ -44,6 +45,17 @@ int reversi::printkey () {
   (*this).generatekey(A);
   cout<<"0123456701234567012345670123456701234567012345670123456701234567"<<endl;
   cout<<A<<endl;
+}
+int reversi::can_set (int sti) {
+  int i=0, j=0;
+  for (i=0; i<8; i++) {
+    for(j=0; j<8; j++) {
+      if((*this).getbenefit(i, j, sti) != -1 ) {
+        return 1;
+      }
+    }
+  }
+  return 0;
 }
 int reversi::generatekey (char *&key) {
   int i,j;
@@ -246,6 +258,28 @@ int com() {
         ) {
           value = value + 2;
         }
+        //border
+        if (i==0) {
+            if (ctrl.value(0, 0) == 1 || ctrl.value(0, 7) == 1) {
+              value=0;
+            }
+        }
+        if (i==7) {
+            if (ctrl.value(7, 0) == 1 || ctrl.value(7, 7) == 1) {
+              value=0;
+            }
+        }
+        if (j==0) {
+            if (ctrl.value(0, 0) == 1 || ctrl.value(7, 0) == 1) {
+              value=0;
+            }
+        }
+        if (j==7) {
+            if (ctrl.value(0, 7) == 1 || ctrl.value(7, 7) == 1) {
+              value=0;
+            }
+        }
+
         if (value>temp_value) {
           temp_value=value; temp[1]=i; temp[2]=j;
         }
@@ -272,7 +306,8 @@ int com() {
     <<"    \"x\": \""<<temp[1]<<"\",\n"
     <<"    \"y\": \""<<temp[2]<<"\",\n"
     <<"    \"version\": \""<<version<<"\",\n"
-    <<"    \"message\": \""<<"OK"<<"\"\n"
+    <<"    \"message\": \""<<"OK"<<"\",\n"
+    <<"    \"copyright\": \""<<"copyright(c) 2017 MAGNET inc."<<"\"\n"
     <<"}";
   }else {
     int p1,p2;
@@ -291,9 +326,10 @@ int com() {
     <<"    \"p1_2\": \""<<ctrl.mypoint()<<"\",\n"
     <<"    \"p2_2\": \""<<ctrl.compoint()<<"\",\n"
     <<"    \"x\": \""<<-1<<"\",\n"
-    <<"    \"y\": \""<<-1<<"\"\n"
+    <<"    \"y\": \""<<-1<<"\",\n"
     <<"    \"version\": \""<<version<<"\",\n"
-    <<"    \"message\": \""<<"OK"<<"\"\n"
+    <<"    \"message\": \""<<"OK"<<"\",\n"
+    <<"    \"copyright\": \""<<"copyright(c) 2017 MAGNET inc."<<"\"\n"
     <<"}";
   }
   return 0;
@@ -308,11 +344,16 @@ int main() {
     cin>>X>>Y;
     strcpy(A,B.c_str());
     ctrl.setbykey(A);
-    if (ctrl.set(X, Y, 1)==-1) {
+    if (ctrl.can_set(1) == 0) {
+      com();
+      return 0;
+    }
+    if (ctrl.set(X, Y, 1) == -1) {
       cout
       <<"{\n"
       <<"    \"version\": \""<<version<<"\",\n"
-      <<"    \"message\": \""<<"err"<<"\"\n"
+      <<"    \"message\": \""<<"err"<<"\",\n"
+      <<"    \"copyright\": \""<<"copyright(c) 2017 MAGNET inc."<<"\"\n"
       <<"}";
       return 0;
     }

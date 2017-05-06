@@ -49,12 +49,12 @@ function drop (x, y) {
   get.send();
   get.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-       if (this.responseText[0]!='{')
+       var response = JSON.parse(this.responseText);
+       if (response.message == "err")
        {
          setTimeout(function(){coverer.classList.add("style-hidden");coverer_loader.classList.add("style-hidden");}, 500);
          return 0;
        }else {
-         var response = JSON.parse(this.responseText);
          mykey=response.key1;
          set_left_point(response.p1_1);
          set_right_point(response.p2_1);
@@ -81,7 +81,6 @@ function drop (x, y) {
 var mykey="NNNNNNNNNNNNNNNNNNNNNNNNNNNABNNNNNNBANNNNNNNNNNNNNNNNNNNNNNNNNNN";
 //initailize
 function initailize () {
-
   draw_map (mykey);
   set_right_point(2);
   set_left_point(2);

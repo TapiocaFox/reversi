@@ -280,8 +280,8 @@ int com() {
             }
         }
 
-        if (value>temp_value) {
-          temp_value=value; temp[1]=i; temp[2]=j;
+        if (value >= temp_value) {
+          temp_value = value; temp[1]=i; temp[2]=j;
         }
       }
     }
